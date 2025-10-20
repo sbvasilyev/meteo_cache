@@ -1,6 +1,14 @@
-# Simple Tarantool Cartridge-based application
+# OpenMeteo API Cache
 
-This a simplest application based on Tarantool Cartridge.
+Usage
+```
+GET /forecast?city=%CITY_NAME%&%OPEN_METEO_API_PARAMS%
+```
+
+For instance
+```
+GET /forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m
+```
 
 ## Quick start
 
