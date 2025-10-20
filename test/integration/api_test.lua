@@ -23,8 +23,6 @@ g.test_cache_hit = function(cg)
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
     t.assert_equals(response.status, 200)
 
-    fiber.sleep(5)
-
     local repeat_response =
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
     t.assert_equals(repeat_response.status, 200)
@@ -50,7 +48,9 @@ g.test_cache_miss = function(cg)
     local response =
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
 
-    fiber.sleep(5)
+    -- default delay for the expirationd is 1 sec
+    -- flaky test if we do not wait for a while
+    fiber.sleep(2)
 
     local repeat_response =
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
