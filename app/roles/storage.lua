@@ -34,6 +34,10 @@ function M.validate_config(_conf_new, _conf_old)
 end
 
 function M.apply_config(conf, opts)
+    if conf["ttl"] then
+        rawset(_G, "ttl", tonumber(conf["ttl"]))
+    end
+
     return true
 end
 

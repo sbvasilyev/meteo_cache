@@ -8,7 +8,7 @@ local M = {}
 ---@param bucket_id number
 ---@return boolean
 function M.put_value(request_key, request_body, bucket_id)
-    local ttl = tonumber(cartridge.config_get_readonly("ttl") or 60)
+    local ttl = rawget(_G, "ttl") or 60
     local exp_epoch = ttl + os.time()
 
     box.begin()
