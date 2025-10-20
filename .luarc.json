@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.runtime.path": [
+    "?.lua",
+    "?/init.lua",
+    ".rocks/share/tarantool/?.lua",
+    ".rocks/share/tarantool/?/init.lua",
+    ".rocks/share/lua/5.1/?.lua",
+    ".rocks/share/lua/5.1/?/init.lua"
+  ],
+  "Lua.workspace.library": [
+    ".rocks/share/tarantool",
+    ".rocks/share/lua/5.1",
+    "/usr/share/tarantool",
+  ],
+  "Lua.diagnostics.globals": ["vim", "box", "fiber", "cartridge", "vshard"],
+  "Lua.workspace.checkThirdParty": false,
+  "Lua.telemetry.enable": false,
+  "Lua.diagnostics.disable": [
+      "unused-local",
+      "unused-function"
+  ]
+}
+
