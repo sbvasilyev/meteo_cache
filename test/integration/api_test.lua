@@ -17,19 +17,19 @@ g.before_each(function(cg) -- luacheck: no unused args
     helper.truncate_space_on_cluster(g.cluster, "meteo")
 end)
 
--- g.test_cache_hit = function(cg)
---     local server = cg.cluster.main_server
---     local response =
---         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
---     t.assert_equals(response.status, 200)
---
---     fiber.sleep(5)
---
---     local repeat_response =
---         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
---     t.assert_equals(repeat_response.status, 200)
---     t.assert_equals(response.body, repeat_response.body)
--- end
+g.test_cache_hit = function(cg)
+    local server = cg.cluster.main_server
+    local response =
+        server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
+    t.assert_equals(response.status, 200)
+
+    fiber.sleep(5)
+
+    local repeat_response =
+        server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
+    t.assert_equals(repeat_response.status, 200)
+    t.assert_equals(response.body, repeat_response.body)
+end
 
 g.test_set_ttl_in_config = function(cg)
     local config = {
@@ -57,17 +57,3 @@ g.test_cache_miss = function(cg)
     t.assert_equals(repeat_response.status, 200)
     t.assert_not_equals(response.body, repeat_response.body)
 end
-
--- g.test_sample = function(cg)
---     local server = cg.cluster.main_server
---     local response = server:http_request('post', '/admin/api', {json = {query = '{ cluster { self { alias } } }'}})
---     t.assert_equals(response.json, {data = { cluster = { self = { alias = 'api' } } }})
---     t.assert_equals(server.net_box:eval('return box.cfg.memtx_dir'), server.workdir)
--- end
---
--- g.test_metrics = function(cg)
---     local server = cg.cluster.main_server
---     local response = server:http_request('get', '/metrics')
---     t.assert_equals(response.status, 200)
---     t.assert_equals(response.reason, "Ok")
--- end
