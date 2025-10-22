@@ -2,13 +2,15 @@ local cartridge = require("cartridge")
 
 local M = {}
 
+local DEFAULT_TTL = 60
+
 ---Adds provided forecast data to the meteo cache.
 ---@param request_key string
 ---@param request_body string
 ---@param bucket_id number
 ---@return boolean
 function M.put_value(request_key, request_body, bucket_id)
-    local ttl = rawget(_G, "ttl") or 60
+    local ttl = rawget(_G, "ttl") or DEFAULT_TTL
     local exp_epoch = ttl + os.time()
 
     box.begin()

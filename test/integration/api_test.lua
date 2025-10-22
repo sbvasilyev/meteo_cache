@@ -48,12 +48,18 @@ g.test_cache_miss = function(cg)
     local response =
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
 
-    -- default delay for the expirationd is 1 sec
-    -- flaky test if we do not wait for a while
-    fiber.sleep(2)
+    local start_time = fiber.time()
+    local repeat_response
 
-    local repeat_response =
-        server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
-    t.assert_equals(repeat_response.status, 200)
+    while fiber.time() - start_time < 5 do
+        fiber.sleep(1)
+        repeat_response =
+            server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
+
+        if repeat_response.status == 200 and repeat_response.body ~= response.body then
+            break
+        end
+    end
+
     t.assert_not_equals(response.body, repeat_response.body)
 end

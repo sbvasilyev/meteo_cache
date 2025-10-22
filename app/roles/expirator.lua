@@ -23,9 +23,7 @@ local function start_expirator()
 end
 
 function M.init(opts)
-    if opts.is_master then
-        start_expirator()
-    end
+    return true
 end
 
 function M.stop()
@@ -37,6 +35,10 @@ function M.validate_config(conf_new, conf_old)
 end
 
 function M.apply_config(conf, opts)
+    if opts.is_master then
+        start_expirator()
+    end
+
     return true
 end
 

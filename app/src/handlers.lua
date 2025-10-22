@@ -1,4 +1,5 @@
 local vshard = require("vshard")
+local fiber = require("fiber")
 local log = require("log")
 local helpers = require("app.src.helpers")
 local weather_service = require("app.src.weather_service")
@@ -35,9 +36,11 @@ function M.forecast(req)
         return { status = 400, body = coords_err }
     end
 
-    if not vshard.router.call(bucket_id, "write", "put_value", { key, fcast_body, bucket_id }, {}) then
-        log.warn("unable to write data: " .. key .. " :: " .. fcast_body)
-    end
+    fiber.create(function()
+        if not vshard.router.call(bucket_id, "write", "put_value", { key, fcast_body, bucket_id }, {}) then
+            log.warn("unable to write data: " .. key .. " :: " .. fcast_body)
+        end
+    end)
 
     return { status = 200, body = fcast_body }
 end
