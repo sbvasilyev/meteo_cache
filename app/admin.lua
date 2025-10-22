@@ -1,15 +1,15 @@
-local cli_admin = require('cartridge-cli-extensions.admin')
+local cli_admin = require("cartridge-cli-extensions.admin")
 
 -- register admin function probe to use it with "cartridge admin"
 local function init()
     cli_admin.init()
 
     local probe = {
-        usage = 'Probe instance',
+        usage = "Probe instance",
         args = {
             uri = {
-                type = 'string',
-                usage = 'Instance URI',
+                type = "string",
+                usage = "Instance URI",
             },
         },
         call = function(opts)
@@ -19,7 +19,7 @@ local function init()
                 return nil, "Please, pass instance URI via --uri flag"
             end
 
-            local cartridge_admin = require('cartridge.admin')
+            local cartridge_admin = require("cartridge.admin")
             local ok, err = cartridge_admin.probe_server(opts.uri)
 
             if not ok then
@@ -27,13 +27,13 @@ local function init()
             end
 
             return {
-                string.format('Probe %q: OK', opts.uri),
+                string.format("Probe %q: OK", opts.uri),
             }
         end,
     }
 
-    local ok, err = cli_admin.register('probe', probe.usage, probe.args, probe.call)
+    local ok, err = cli_admin.register("probe", probe.usage, probe.args, probe.call)
     assert(ok, err)
 end
 
-return {init = init}
+return { init = init }
