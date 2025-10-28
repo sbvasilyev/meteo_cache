@@ -27,6 +27,11 @@ else
     package.cpath = app_dir .. "/.rocks/lib/tarantool/?.dylib;" .. package.cpath
 end
 
+package.cpath = "./target/debug/?.so;./target/debug/?.dylib;" .. package.cpath
+
+-- for luatest, as it changes cwd on run
+package.cpath = "../../target/debug/?.so;../../target/debug/?.dylib;" .. package.cpath
+
 local has_module, compat = pcall(require, "compat")
 if has_module then
     compat.fiber_slice_default = "new"
@@ -43,6 +48,7 @@ local ok, err = cartridge.cfg({
         "cartridge.roles.metrics",
         "app.roles.storage",
         "app.roles.router",
+        "app.roles.rs-router",
         "app.roles.expirator",
     },
 })
