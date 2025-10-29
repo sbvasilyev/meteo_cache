@@ -45,10 +45,10 @@ fn error_middleware(handler: Handler<MeteoError>) -> Handler<MeteoError> {
         Err(err) => Ok(Response {
             status: 400,
             body: serde_json::to_vec(&err)?,
-            headers: std::collections::HashMap::from([(
-                "content-type".to_string(),
-                "application/json; charset=utf8".to_string(),
-            )]),
+            headers: std::collections::HashMap::from([
+                ("content-type".into(), "application/json;".into()),
+                ("charset".into(), "utf8".into()),
+            ]),
         }),
     }))
 }
