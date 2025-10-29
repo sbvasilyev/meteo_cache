@@ -9,6 +9,12 @@ pub enum MeteoError {
     #[error("[bad_request] error: `{0}`")]
     RequestError(String),
 
+    #[error("[storage] error: `{0}`")]
+    StorageError(String),
+
+    #[error("[lua] error: `{0}`")]
+    LuaError(String),
+
     #[error("[tarantool] error: ")]
     TarantoolError(
         #[from]

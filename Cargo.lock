@@ -1337,6 +1337,7 @@ name = "meteo"
 version = "0.1.0"
 dependencies = [
  "fibreq",
+ "once_cell",
  "serde",
  "serde_json",
  "shors",

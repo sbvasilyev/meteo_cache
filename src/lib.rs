@@ -4,10 +4,13 @@ use tarantool::tlua;
 
 mod bucket_id;
 mod errors;
+mod models;
 mod om_service;
 mod router;
+mod storage;
 
 pub use router::http_init;
+pub use storage::{rpc_init, storage_rpc_handler};
 
 #[allow(clippy::missing_safety_doc)]
 #[unsafe(no_mangle)]

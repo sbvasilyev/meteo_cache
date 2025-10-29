@@ -14,6 +14,7 @@ s-1:
   roles:
   - vshard-storage
   - app.roles.storage
+  - app.roles.rs-storage
   - app.roles.expirator
   weight: 1
   all_rw: false
@@ -25,6 +26,7 @@ s-2:
   roles:
   - vshard-storage
   - app.roles.storage
+  - app.roles.rs-storage
   - app.roles.expirator
   weight: 1
   all_rw: false
