@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use shors::transport::{Context, http::Request, rpc::client::Builder};
 
-use crate::{bucket_id, errors::MeteoError, om_service::OpenMeteoService};
+use crate::{errors::MeteoError, lua_helpers, om_service::OpenMeteoService};
 
 pub fn ping_handler(_ctx: &mut Context, _req: Request) -> Result<String, MeteoError> {
     Ok("pong".into())
@@ -22,7 +22,7 @@ pub fn forecast_handler(
     let query = make_consistent_query(params);
 
     let key = format!("{city}:::{query}");
-    let bucket_id = bucket_id::make_id(&key)?;
+    let bucket_id = lua_helpers::make_id(&key)?;
     let lua = tarantool::lua_state();
 
     let get_result: Option<String> = Builder::new(&lua)

@@ -3,7 +3,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use shors::transport::{Context, rpc::Request};
 use tarantool::space::Space;
 
-use crate::{errors::MeteoError, models::ForecastEntry};
+use crate::{errors::MeteoError, lua_helpers, models::ForecastEntry};
 
 pub fn get_forecast(_ctx: &mut Context, req: Request) -> Result<Option<String>, MeteoError> {
     let key = req
@@ -35,11 +35,12 @@ pub fn put_forecast(_ctx: &mut Context, req: Request) -> Result<(), MeteoError> 
         "space 'meteo' does not exist".into(),
     ))?;
 
+    let ttl = lua_helpers::get_ttl()?;
     let expires_at = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map_err(|err| MeteoError::StorageError(format!("failed to get current time: {err:?}")))?
         .as_secs()
-        + 60;
+        + (ttl as u64);
 
     space
         .insert(&ForecastEntry {
