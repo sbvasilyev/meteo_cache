@@ -3,7 +3,7 @@ local storage = require("app.src.storage")
 local M = {}
 
 M.role_name = "app.roles.rs-storage"
-M.dependencies = { "cartridge.roles.vshard-storage", "app.roles.storage" }
+M.dependencies = { "cartridge.roles.vshard-storage", "app.roles.storage", "app.roles.rs-config" }
 
 function M.init(opts)
     require("libmeteo")

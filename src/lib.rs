@@ -2,6 +2,7 @@ use std::os::raw::c_int;
 use tarantool::ffi::lua as ffi_lua;
 use tarantool::tlua;
 
+mod config;
 mod errors;
 mod lua_helpers;
 mod models;
@@ -9,6 +10,7 @@ mod om_service;
 mod router;
 mod storage;
 
+pub use config::update_config;
 pub use router::http_init;
 pub use storage::{rpc_init, storage_rpc_handler};
 

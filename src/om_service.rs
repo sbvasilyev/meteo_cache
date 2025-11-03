@@ -1,7 +1,10 @@
 use fibreq::Client;
 use serde_json::Value;
 
-use crate::errors::MeteoError;
+use crate::{
+    config::{get_forecast_url, get_geocode_url},
+    errors::MeteoError,
+};
 
 struct Coords {
     lat: f64,
@@ -10,17 +13,12 @@ struct Coords {
 
 pub struct OpenMeteoService {
     http_client: Client,
-    geocode_url: String,
-    forecast_url: String,
 }
 
 impl Default for OpenMeteoService {
     fn default() -> Self {
         Self {
             http_client: fibreq::ClientBuilder::new().build(),
-            geocode_url: "https://geocoding-api.open-meteo.com/v1/search?count=1&language=en&name="
-                .into(),
-            forecast_url: "https://api.open-meteo.com/v1/forecast?".into(),
         }
     }
 }
@@ -32,7 +30,7 @@ impl OpenMeteoService {
     }
 
     fn geocode_city(&self, city: &str) -> Result<Coords, MeteoError> {
-        let req_ulr = format!("{}{}", self.geocode_url, city);
+        let req_ulr = format!("{}{}", get_geocode_url(), city);
 
         let resp_body = self.make_request(&req_ulr)?;
         let json_body: Value = serde_json::from_str(&resp_body).map_err(|err| {
@@ -53,7 +51,10 @@ impl OpenMeteoService {
     fn forecast(&self, coords: Coords, query: &str) -> Result<String, MeteoError> {
         let req_ulr = format!(
             "{}latitude={}&longitude={}&{}",
-            self.forecast_url, coords.lat, coords.lon, query
+            get_forecast_url(),
+            coords.lat,
+            coords.lon,
+            query
         );
 
         self.make_request(&req_ulr)

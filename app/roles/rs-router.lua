@@ -4,7 +4,7 @@ local handlers = require("app.src.handlers")
 local M = {}
 
 M.role_name = "app.roles.rs-router"
-M.dependencies = { "cartridge.roles.vshard-router" }
+M.dependencies = { "cartridge.roles.vshard-router", "app.roles.rs-config" }
 
 function M.init(_opts)
     require("libmeteo")

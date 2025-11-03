@@ -24,13 +24,3 @@ pub fn make_id(sharding_key: &str) -> Result<i64, MeteoError> {
         .map_err(|err| MeteoError::LuaError(format!("bucket_id_fn error: {err:?}")))?;
     Ok(bucket_id)
 }
-
-const DEFAULT_TTL: i32 = 60;
-
-pub fn get_ttl() -> Result<i32, MeteoError> {
-    let lua = lua_state();
-    let ttl: i32 = lua
-        .eval(&format!("return rawget(_G, 'ttl') or {DEFAULT_TTL};"))
-        .map_err(|err| MeteoError::LuaError(format!("unable to get ttl from _G: {err:?}")))?;
-    Ok(ttl)
-}
