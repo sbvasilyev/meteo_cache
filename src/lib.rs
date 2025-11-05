@@ -12,7 +12,14 @@ mod storage;
 
 pub use config::update_config;
 pub use router::http_init;
-pub use storage::{rpc_init, storage_rpc_handler};
+pub use storage::{create_meteo_space, rpc_init, storage_rpc_handler};
+
+#[tarantool::proc]
+pub fn init_meteo_space() {
+    if let Err(err) = create_meteo_space() {
+        eprintln!("failed to init meteo space: {err:?}");
+    }
+}
 
 #[allow(clippy::missing_safety_doc)]
 #[unsafe(no_mangle)]

@@ -4,6 +4,9 @@ use shors::transport::rpc::{route::Builder, server::Server};
 use tarantool::tuple::{FunctionArgs, FunctionCtx};
 
 mod handlers;
+mod init;
+
+pub use init::create_meteo_space;
 
 thread_local! {
     pub static RPC_SERVER: once_cell::unsync::Lazy<Server> = once_cell::unsync::Lazy::new(Server::new);

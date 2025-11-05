@@ -3,10 +3,15 @@ local storage = require("app.src.storage")
 local M = {}
 
 M.role_name = "app.roles.rs-storage"
-M.dependencies = { "cartridge.roles.vshard-storage", "app.roles.storage", "app.roles.rs-config" }
+M.dependencies = { "cartridge.roles.vshard-storage", "app.roles.rs-config" }
 
 function M.init(opts)
     require("libmeteo")
+
+    if opts.is_master then
+        box.schema.func.create("libmeteo.init_meteo_space", { language = "C", if_not_exists = true })
+        box.func["libmeteo.init_meteo_space"]:call({})
+    end
 
     box.schema.func.create("libmeteo.rpc_init", { language = "C", if_not_exists = true })
     box.func["libmeteo.rpc_init"]:call({})

@@ -19,10 +19,9 @@ function M.validate_config(_conf_new, _conf_old)
 end
 
 function M.apply_config(conf, opts)
-    local ttl = conf["ttl"] or 20
-    local geocode_url = conf["geocode_url"]
-        or "https://geocoding-api.open-meteo.com/v1/search?count=1&language=en&name="
-    local forecast_url = conf["forecast_url"] or "https://api.open-meteo.com/v1/forecast?"
+    local ttl = conf["ttl"] or 60
+    local geocode_url = conf["geocode_url"] or "http://geocoding-api.open-meteo.com/v1/search?count=1&language=en&name="
+    local forecast_url = conf["forecast_url"] or "http://api.open-meteo.com/v1/forecast?"
 
     box.func["libmeteo.update_config"]:call({ ttl, geocode_url, forecast_url })
 
