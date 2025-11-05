@@ -32,6 +32,8 @@ package.cpath = "./target/debug/?.so;./target/debug/?.dylib;" .. package.cpath
 -- for luatest, as it changes cwd on run
 package.cpath = "../../target/debug/?.so;../../target/debug/?.dylib;" .. package.cpath
 
+require("libmeteo")
+
 local has_module, compat = pcall(require, "compat")
 if has_module then
     compat.fiber_slice_default = "new"

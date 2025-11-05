@@ -7,8 +7,6 @@ M.role_name = "app.roles.rs-router"
 M.dependencies = { "cartridge.roles.vshard-router", "app.roles.rs-config" }
 
 function M.init(_opts)
-    require("libmeteo")
-
     box.schema.func.create("libmeteo.http_init", { language = "C", if_not_exists = true })
     box.func["libmeteo.http_init"]:call({})
 
