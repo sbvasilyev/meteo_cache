@@ -1,4 +1,4 @@
-local storage = require("app.src.storage")
+local rust = require("app.rust")
 
 local M = {}
 
@@ -6,10 +6,7 @@ M.role_name = "app.roles.rs-storage"
 M.dependencies = { "cartridge.roles.vshard-storage", "app.roles.rs-config" }
 
 function M.init(opts)
-    if opts.is_master then
-        box.schema.func.create("libmeteo.init_meteo_space", { language = "C", if_not_exists = true })
-        box.func["libmeteo.init_meteo_space"]:call({})
-    end
+    rust.init("storage")
 
     box.schema.func.create("libmeteo.rpc_init", { language = "C", if_not_exists = true })
     box.func["libmeteo.rpc_init"]:call({})
@@ -31,6 +28,10 @@ function M.validate_config(_conf_new, _conf_old)
 end
 
 function M.apply_config(conf, opts)
+    if opts.is_master then
+        rust.init_meteo_space()
+    end
+
     return true
 end
 

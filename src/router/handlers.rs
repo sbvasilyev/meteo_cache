@@ -28,7 +28,7 @@ pub fn forecast_handler(
     let get_result: Option<String> = Builder::new(&lua)
         .shard_endpoint("get_forecast")
         .call(ctx, bucket_id, key.clone())
-        .map_err(|err| MeteoError::StorageError(format!("rpc call failed: {err:?}")))?
+        .map_err(|err| MeteoError::StorageError(format!("rpc call failed from get: {err:?}")))?
         .get(0)
         .ok_or(MeteoError::StorageError("forecast decode fail".into()))?;
     if let Some(forecast) = get_result {
@@ -40,7 +40,7 @@ pub fn forecast_handler(
     let _put_result = Builder::new(&lua)
         .shard_endpoint("put_forecast")
         .call(ctx, bucket_id, (bucket_id, key, weather.clone()))
-        .map_err(|err| MeteoError::StorageError(format!("rpc call failed: {err:?}")))?;
+        .map_err(|err| MeteoError::StorageError(format!("rpc call failed from put: {err:?}")))?;
 
     Ok(weather)
 }

@@ -1,5 +1,4 @@
-local cartridge = require("cartridge")
-local handlers = require("app.src.handlers")
+local rust = require("app.rust")
 
 local M = {}
 
@@ -7,8 +6,8 @@ M.role_name = "app.roles.rs-router"
 M.dependencies = { "cartridge.roles.vshard-router", "app.roles.rs-config" }
 
 function M.init(_opts)
-    box.schema.func.create("libmeteo.http_init", { language = "C", if_not_exists = true })
-    box.func["libmeteo.http_init"]:call({})
+    rust.init("router")
+    rust.http_init()
 
     return true
 end
