@@ -27,6 +27,13 @@ else
     package.cpath = app_dir .. "/.rocks/lib/tarantool/?.dylib;" .. package.cpath
 end
 
+package.cpath = "./target/debug/?.so;./target/debug/?.dylib;" .. package.cpath
+
+-- for luatest, as it changes cwd on run
+package.cpath = "../../target/debug/?.so;../../target/debug/?.dylib;" .. package.cpath
+
+require("libmeteo")
+
 local has_module, compat = pcall(require, "compat")
 if has_module then
     compat.fiber_slice_default = "new"
@@ -41,8 +48,11 @@ local ok, err = cartridge.cfg({
         "cartridge.roles.vshard-storage",
         "cartridge.roles.vshard-router",
         "cartridge.roles.metrics",
+        "app.roles.rs-config",
         "app.roles.storage",
+        "app.roles.rs-storage",
         "app.roles.router",
+        "app.roles.rs-router",
         "app.roles.expirator",
     },
 })

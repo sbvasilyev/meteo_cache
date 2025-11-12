@@ -48,18 +48,20 @@ g.test_cache_miss = function(cg)
     local response =
         server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
 
+    local storage = cg.cluster:server("storage-1")
     local start_time = fiber.time()
-    local repeat_response
+    local count
 
     while fiber.time() - start_time < 5 do
         fiber.sleep(1)
-        repeat_response =
-            server:http_request("get", "/forecast?city=Moscow&timezone=auto&forecast_days=3&hourly=temperature_2m")
+        count = storage:exec(function()
+            return box.space.meteo and box.space.meteo:count() or 0
+        end)
 
-        if repeat_response.status == 200 and repeat_response.body ~= response.body then
+        if count == 0 then
             break
         end
     end
 
-    t.assert_not_equals(response.body, repeat_response.body)
+    t.assert_equals(count, 0)
 end
